@@ -97,14 +97,18 @@ async function get_context(con = {}) {
             info.context = "Form";
             info.doctype = cur_frm.doctype;
             info.docname = cur_frm.docname;
+            info.title = `${info.doctype} - ${cur_frm.docname} Error`;
         } else if (frappe.listview_settings && frappe.get_route()[0] === "List") {
             info.context = "List";
             info.doctype = frappe.get_route()[1];
+            info.title = `${info.doctype} List Error`;
         } else if (frappe.get_route()[0] === "query-report") {
             info.context = "Report";
             info.report_name = frappe.get_route()[1];
+            info.title = `Report: ${info.report_name} Error`;
         } else if (frappe.pages && frappe.get_route()[0] === "page") {
             info.context = "Page";
+            info.title = `Page: ${frappe.get_route()[1]} Error`;
         } else {
             info.context = "Other";
         }
@@ -125,7 +129,7 @@ async function get_context(con = {}) {
         patch_textboxes_for_capture(clonedDoc, clonedDoc.body);
         }
             });
-            info.screenshot = canvas.toDataURL("image/png");
+            info.screenshot = canvas.toDataURL("image/png", 0.5);
         } else {
             console.warn("html2canvas not loaded");
         }
@@ -260,7 +264,7 @@ frappe.request.report_error = function (xhr, request_opts) {
                     frappe.error_dialog.hide();
                 });
             } else {
-                frappe.error_dialog.set_primary_action(__("Copy error to clipboard ya Boss"), () => {
+                frappe.error_dialog.set_primary_action(__("Copy error to clipboard"), () => {
                     copy_markdown_to_clipboard();
                     frappe.error_dialog.hide();
                 });
