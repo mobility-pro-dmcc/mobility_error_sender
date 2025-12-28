@@ -1,0 +1,67 @@
+/* Base secondary button look */
+.my-secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.45rem 1.1rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    border-width: 1px;
+    border-style: solid;
+    transition:
+        background-color 120ms ease,
+        border-color 120ms ease,
+        color 120ms ease,
+        box-shadow 120ms ease,
+        transform 80ms ease;
+}
+
+.my-secondary-btn .secondary-btn-icon {
+    flex-shrink: 0;
+}
+
+/* ---------- LIGHT THEME (like the first screenshot) ---------- */
+/* html[data-theme="light"] is what Frappe sets on the <html> tag */
+html[data-theme="light"] .my-secondary-btn {
+    background-color: #5e6cf5;   /* main purple */
+    border-color: #4c5ae8;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.16);
+}
+
+html[data-theme="light"] .my-secondary-btn:hover {
+    background-color: #4c5ae8;   /* slightly darker */
+    border-color: #414ed9;
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.28);
+    transform: translateY(-1px);
+}
+
+html[data-theme="light"] .my-secondary-btn:active {
+    background-color: #414ed9;
+    border-color: #3743c7;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.24);
+    transform: translateY(0);
+}
+
+/* ---------- DARK THEME (like the second screenshot) ---------- */
+html[data-theme="dark"] .my-secondary-btn {
+    background-color: #111827;   /* card background */
+    border-color: #6366f1;       /* purple border/accent */
+    color: #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+html[data-theme="dark"] .my-secondary-btn:hover {
+    background-color: #1f2937;   /* slightly lighter card */
+    border-color: #818cf8;
+    color: #f9fafb;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+    transform: translateY(-1px);
+}
+
+html[data-theme="dark"] .my-secondary-btn:active {
+    background-color: #020617;
+    border-color: #4f46e5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    transform: translateY(0);
+}

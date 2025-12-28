@@ -1,3 +1,12 @@
+const secondaryIconSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+        width="18" height="18" viewBox="0 0 24 24" fill="none"
+        class="secondary-btn-icon">
+    <path d="M12.5263 2C17.7579 2 22 6.47777 22 12C22 17.5222 17.7579 22 12.5263 22H5.15789C3.41579 22 2 20.5055 2 18.6667V15.3333H10.3429V19.7778H12.5263C16.5947 19.7778 19.8947 16.2945 19.8947 12C19.8947 7.70555 16.5947 4.22222 12.5263 4.22222H10.3429V8.66667H2V5.33333C2 3.49445 3.41579 2 5.15789 2H12.5263Z"
+            fill="currentColor"></path>
+    </svg>
+`;
+
 function patch_textboxes_for_capture(clonedDoc, root = null) {
     root = root || clonedDoc.body;
 
@@ -70,8 +79,7 @@ function patch_textboxes_for_capture(clonedDoc, root = null) {
         // Replace original control
         el.replaceWith(div);
     });
-}
-
+};
 
 async function get_context(con = {}) {
     const info = {
@@ -138,7 +146,8 @@ async function get_context(con = {}) {
     }
 
     return info;
-}
+};
+
 async function send_error(con = {}) {
     // hide the dialog you created (NOT cur_dialog)
     
@@ -170,8 +179,7 @@ async function send_error(con = {}) {
             frappe.dom.unfreeze();
         }
     }, 500);
-}
-
+};
 
 frappe.request.report_error = function (xhr, request_opts) {
     console.log(xhr.responseText)
@@ -254,7 +262,7 @@ frappe.request.report_error = function (xhr, request_opts) {
         if (!frappe.error_dialog) {
             frappe.error_dialog = new frappe.ui.Dialog({
                 title: __("Server Error"),
-                secondary_action_label: __("Send To Support"),
+                secondary_action_label: __("Send Ticket To Support"),
                 secondary_action: function (){ send_error({exc, msg:strip(exc).split("\n")[strip(exc).split("\n").length - 1]});}
             });
 
@@ -269,6 +277,15 @@ frappe.request.report_error = function (xhr, request_opts) {
                     frappe.error_dialog.hide();
                 });
             }
+            frappe.error_dialog.on_page_show = () => {
+                const $btn = frappe.error_dialog.$wrapper.find(".modal-footer .btn-secondary");
+                if (!$btn.length) return;
+
+                $btn.addClass("my-secondary-btn");
+
+                const plainLabel = ($btn.text() || "Send Ticket To Support").trim();
+                $btn.html(`${secondaryIconSvg}<span class="secondary-btn-label">${plainLabel}</span>`);
+            };
             frappe.error_dialog.wrapper.classList.add("msgprint-dialog");
         }
 
@@ -302,9 +319,18 @@ function open_throw_dialog(msg){
         primary_action() {
             d.hide();
         },
-        secondary_action_label: 'Send To Support',
+        secondary_action_label: 'Send Ticket To Support',
         secondary_action: function() { send_error({exc: msg.exc || null, msg: msg.message || null}) }
     });
+    d.on_page_show = () => {
+        const $btn = d.$wrapper.find(".modal-footer .btn-secondary");
+        if (!$btn.length) return;
+
+        $btn.addClass("my-secondary-btn");
+
+        const plainLabel = ($btn.text() || "Send Ticket To Support").trim();
+        $btn.html(`${secondaryIconSvg}<span class="secondary-btn-label">${plainLabel}</span>`);
+    };
     d.show();
 }
 
