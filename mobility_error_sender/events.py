@@ -67,7 +67,7 @@ def send_error_report(context=None, doctype=None, title=None, docname=None,
     params = {"ticket_object": json.dumps(ticket_object)}
     headers = {"Authorization": api_token, "accept": "application/json"}
 
-    files = {}
+    files = { "file": "" }
     if file_bytes:
         files["file"] = ("error_screenshot.png", file_bytes, "image/png")
 

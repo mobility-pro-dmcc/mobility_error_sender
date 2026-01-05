@@ -81,7 +81,7 @@ function patch_textboxes_for_capture(clonedDoc, root = null) {
     });
 };
 
-async function get_context(con = {}) {
+async function get_context(con = {}, with_screenshot = false) {
     const info = {
         context: null,
         doctype: null,
@@ -123,30 +123,36 @@ async function get_context(con = {}) {
     } catch (e) {
         console.warn("context detection failed", e);
     }
-
-    try {
-        // 🖼️ Capture screenshot using html2canvas
-        if (typeof html2canvas !== "undefined") {
-            const canvas = await html2canvas(document.body, { 
-                backgroundColor: null,
-                scale: 1,
-                foreignObjectRendering: true,
-                useCORS: true,
-        ignoreElements: (el) => el.classList?.contains("freeze") || el.id === "freeze",
-        onclone: (clonedDoc) => {
-        patch_textboxes_for_capture(clonedDoc, clonedDoc.body);
-        }
-            });
-            info.screenshot = canvas.toDataURL("image/png", 0.5);
-        } else {
-            console.warn("html2canvas not loaded");
-        }
-    } catch (e) {
-        console.warn("screenshot capture failed", e);
+    if (!with_screenshot) {
+        info.screenshot = window.screenshot;
     }
-
     return info;
 };
+async function capture_screenshot() {
+    frappe.dom.freeze(__("capturing screenshot may take a while..."));
+    setTimeout(async () => {
+        try {
+            if (typeof html2canvas !== "undefined") {
+                const canvas = await html2canvas(document.body, { 
+                    backgroundColor: null,
+                    scale: 1,
+                    foreignObjectRendering: true,
+                    useCORS: true,
+            ignoreElements: (el) => el.classList?.contains("freeze") || el.id === "freeze",
+            onclone: (clonedDoc) => {
+            patch_textboxes_for_capture(clonedDoc, clonedDoc.body);
+            }
+                });
+                window.screenshot = canvas.toDataURL("image/png", 0.1);
+            } else {
+                console.warn("html2canvas not loaded");
+            }
+        } catch (e) {
+            console.warn("screenshot capture failed", e);
+        }
+        frappe.dom.unfreeze();
+    }, 100);
+}
 
 async function send_error(con = {}) {
     // hide the dialog you created (NOT cur_dialog)
@@ -156,7 +162,7 @@ async function send_error(con = {}) {
     
     // freeze (do NOT await freeze)
                 if (cur_dialog) cur_dialog.hide();
-    frappe.dom.freeze("sending...");
+    frappe.dom.freeze(__("Sending..."));
     
     setTimeout(async() => {	
         try {
@@ -285,6 +291,20 @@ frappe.request.report_error = function (xhr, request_opts) {
 
                 const plainLabel = ($btn.text() || "Send Ticket To Support").trim();
                 $btn.html(`${secondaryIconSvg}<span class="secondary-btn-label">${plainLabel}</span>`);
+                checkbox = $(`
+                    <div class="form-check me-3 d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input" id="confirm_cb">
+                        <label class="form-check-label ms-2" for="confirm_cb">
+                            Capture Screen
+                        </label>
+                    </div>
+                `);
+                frappe.error_dialog.footer.prepend(checkbox);
+                checkbox.find("input").on("change", function () {
+                    if (this.checked === true) {
+                        capture_screenshot();
+                    }
+                });
             };
             frappe.error_dialog.wrapper.classList.add("msgprint-dialog");
         }
@@ -330,6 +350,20 @@ function open_throw_dialog(msg){
 
         const plainLabel = ($btn.text() || "Send Ticket To Support").trim();
         $btn.html(`${secondaryIconSvg}<span class="secondary-btn-label">${plainLabel}</span>`);
+        checkbox = $(`
+            <div class="form-check me-3 d-flex align-items-center">
+                <input type="checkbox" class="form-check-input" id="confirm_cb">
+                <label class="form-check-label ms-2" for="confirm_cb">
+                    Capture Screen
+                </label>
+            </div>
+        `);
+        d.footer.prepend(checkbox);
+        checkbox.find("input").on("change", function () {
+            if (this.checked === true) {
+                capture_screenshot();
+            }
+        });
     };
     d.show();
 }
