@@ -106,6 +106,7 @@ async function get_context(con = {}, with_screenshot = false) {
             info.doctype = cur_frm.doctype;
             info.docname = cur_frm.docname;
             info.title = `${info.doctype} - ${cur_frm.docname} Error`;
+            info.doc_dict = cur_frm.doc;
         } else if (frappe.listview_settings && frappe.get_route()[0] === "List") {
             info.context = "List";
             info.doctype = frappe.get_route()[1];

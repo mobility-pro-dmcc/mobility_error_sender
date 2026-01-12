@@ -7,7 +7,7 @@ from frappe.utils.file_manager import save_file
 @frappe.whitelist()
 def send_error_report(context=None, doctype=None, title=None, docname=None,
                       report_name=None, page_link=None, message=None,
-                      traceback=None, user=None, domain=None, screenshot=None):
+                      traceback=None, user=None, domain=None, screenshot=None, doc_dict= None):
     """Send error details to Desk365 as a ticket with screenshot."""
 
     # ---------------- decode screenshot & save internally ----------------
@@ -49,6 +49,9 @@ def send_error_report(context=None, doctype=None, title=None, docname=None,
         {traceback or '-'}
         </pre>
         ```
+
+        doc_dict:
+        {doc_dict or '-'}
     """
     ticket_object = {
         "email": email_addr,
