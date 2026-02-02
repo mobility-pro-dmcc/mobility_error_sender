@@ -34,25 +34,24 @@ def send_error_report(context=None, doctype=None, title=None, docname=None,
     except Exception:
         print("Traceback is not a JSON list")
     description = f"""
-        Doctype: {doctype or '-'}  
-        Docname: {docname or '-'}  
-        Report: {report_name or '-'}  
-        Page: {page_link or '-'}  
-        Domain: {domain or '-'}  
+Doctype: {doctype or '-'}  
+Docname: {docname or '-'}  
+Report: {report_name or '-'}  
+Page: {page_link or '-'}  
+Domain: {domain or '-'}  
 
-        Message:  
-        {message or '-'}
+Message:  
+{message or '-'}
 
-        Traceback:  
-        ```
-        <pre>
-        {traceback or '-'}
-        </pre>
-        ```
+Traceback:  
+```
+{traceback or '-'}
+```
 
-        doc_dict:
-        {doc_dict or '-'}
-    """
+Document Snapshot:
+{json.dumps(json.loads(doc_dict), indent=4, ensure_ascii=False) or '-'}
+    """.strip()
+    description_bytes = description.encode("utf-8")
     ticket_object = {
         "email": email_addr,
         "subject": title or "Error Report from Frappe",
@@ -70,9 +69,22 @@ def send_error_report(context=None, doctype=None, title=None, docname=None,
     params = {"ticket_object": json.dumps(ticket_object)}
     headers = {"Authorization": api_token, "accept": "application/json"}
 
-    files = { "file": "" }
+    files = []
+
+    # description file (always sent)
+    files.append((
+        "files",
+        ("error_report.txt", description_bytes, "text/plain")
+    ))
+
+    # optional screenshot
     if file_bytes:
-        files["file"] = ("error_screenshot.png", file_bytes, "image/png")
+        files.append((
+            "files",
+            ("error_screenshot.png", file_bytes, "image/png")
+        ))
+
+
 
     resp = requests.post(api_url, headers=headers, params=params, files=files)
 
