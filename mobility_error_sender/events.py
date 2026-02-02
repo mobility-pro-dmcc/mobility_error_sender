@@ -56,7 +56,7 @@ def send_error_report(context=None, doctype=None, title=None, docname=None,
     ticket_object = {
         "email": email_addr,
         "subject": title or "Error Report from Frappe",
-        "description": f"<pre>{description[:3980]}</pre>",
+        "description": f"<pre>{message or '-'}</pre>",
         "status": "open",
         "priority": 1,
         "group": "ERP Team",
@@ -74,7 +74,7 @@ def send_error_report(context=None, doctype=None, title=None, docname=None,
     if file_bytes:
         files["file"] = ("error_screenshot.png", file_bytes, "image/png")
 
-    resp = requests.post(api_url, headers=headers, data=params, files=files)
+    resp = requests.post(api_url, headers=headers, params=params, files=files)
 
     if resp.status_code not in (200, 201):
         frappe.log_error(message=f"Desk365 response ({resp.status_code}): {resp.text}", title="send_error_report")
