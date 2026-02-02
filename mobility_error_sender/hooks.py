@@ -28,6 +28,7 @@ app_license = "mit"
 app_include_css = "/assets/mobility_error_sender/css/mobility_error_sender.css"
 app_include_js = ["https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js", "/assets/mobility_error_sender/js/mobility_error_sender2.js"]
 
+
 # include js, css files in header of web template
 # web_include_css = "/assets/mobility_error_sender/css/mobility_error_sender.css"
 # web_include_js = "/assets/mobility_error_sender/js/mobility_error_sender.js"
