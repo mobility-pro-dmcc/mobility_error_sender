@@ -49,7 +49,7 @@ Traceback:
 ```
 
 Document Snapshot:
-{json.dumps(json.loads(doc_dict), indent=4, ensure_ascii=False) or '-'}
+{json.dumps(json.loads(doc_dict), indent=4, ensure_ascii=False) if doc_dict else '-'}
     """.strip()
     description_bytes = description.encode("utf-8")
     ticket_object = {
@@ -74,7 +74,7 @@ Document Snapshot:
     # description file (always sent)
     files.append((
         "files",
-        ("error_report.txt", description_bytes, "text/plain")
+        ("error_report.txt", description_bytes, "text/plain; charset=utf-8")
     ))
 
     # optional screenshot
