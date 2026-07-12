@@ -6,7 +6,20 @@ const secondaryIconSvg = `
             fill="currentColor"></path>
     </svg>
 `;
-
+function format_messages(data) {
+    const result = data.map(item => {
+        const parsedItem = JSON.parse(item);
+        let msg = parsedItem.message || "";
+        
+        // Check if raise_exception exists and is truthy
+        if (parsedItem.raise_exception) {
+            msg = `<div style="background-color: rgba(255, 0, 0, 0.07); padding: 10px 5px; border-radius: 4px;">${msg}</div>`;
+        }
+        
+        return msg;
+    }).join("<hr>");
+    return result;
+}
 function patch_textboxes_for_capture(clonedDoc, root = null) {
     root = root || clonedDoc.body;
 
@@ -189,7 +202,7 @@ async function send_error(con = {}) {
 };
 
 frappe.request.report_error = function (xhr, request_opts) {
-    console.log(xhr.responseText)
+    
     var data = JSON.parse(xhr.responseText);
     var exc;
     if (data.exc) {
@@ -374,6 +387,7 @@ frappe.throw = function(msg) {
         msg = { message: msg, title: __("Error") };
     }
     if (!msg.indicator) msg.indicator = "red";
+    console.log(msg)
     error = new Error(msg.message);
     // Show dialog instead of immediate throw
     open_throw_dialog(msg);
@@ -428,7 +442,7 @@ frappe.request.cleanup = function (opts, r) {
         console.log(messages)
         open_throw_dialog({
             title: __("Message"),
-            message: JSON.parse(messages[0]).message,
+            message: format_messages(messages),
             exc: r.exc
         });
         } else {

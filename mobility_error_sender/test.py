@@ -1,6 +1,7 @@
 import json
 import urllib.parse
 import requests
+import frappe
 
 api_token = "aa01afc2df5ed6c532015b949e1e9426d8a386d4e8bc73cccdc5562faf3c5fad"
 api_url = "https://mobilityp.desk365.io/apis/v3/tickets/create_with_attachment"
@@ -50,3 +51,7 @@ try:
     print("Response JSON:", response.json())
 except Exception:
     print("Response Text:", response.text)
+
+@frappe.whitelist()
+def send_error():
+    frappe.throw(_("Error Sent unformatted {0}").format("ahmed"))

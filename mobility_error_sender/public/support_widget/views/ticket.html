@@ -1,0 +1,155 @@
+<!-- 
+template variables: ticket{
+    id: string,
+    title: string,
+    status: string,
+    messages: [
+        {
+            type: "customer" | "agent",
+            content: string,
+            time: string
+        },
+        ...
+    ]
+}
+-->
+<div id="support-ticket">
+    <div class="sw-ticket-details">
+
+        <header class="sw-details-header">
+            <div class="sw-header-title">
+
+                <button class="sw-back-ticket">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="30"
+                         height="30"
+                         viewBox="0 0 24 24"
+                         fill="white"
+                         aria-hidden="true">
+                        <path
+                            d="M14.8 5.6
+                            C15.2 6 15.2 6.6 14.8 7
+                            L9.8 12
+                            L14.8 17
+                            C15.2 17.4 15.2 18 14.8 18.4
+                            C14.4 18.8 13.8 18.8 13.4 18.4
+                            L7.6 12.6
+                            C7.2 12.2 7.2 11.8 7.6 11.4
+                            L13.4 5.6
+                            C13.8 5.2 14.4 5.2 14.8 5.6
+                            Z"/>
+                    </svg>
+                </button>
+
+                <strong><%= ticket.title %></strong>
+                <span><%= ticket.id + " . " + ticket.status %></span>
+
+            </div>
+
+            <button class="sw-close">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="50"
+                     height="30"
+                     viewBox="0 0 24 24"
+                     fill="white">
+                    <path
+                        d="M3.5 13.5
+                        C3.5 12.6 4.1 12 5 12
+                        H19
+                        C19.9 12 20.5 12.6 20.5 13.5
+                        C20.5 14.4 19.9 15 19 15
+                        H5
+                        C4.1 15 3.5 14.4 3.5 13.5
+                        Z"/>
+                </svg>
+            </button>
+
+        </header>
+
+
+        <div class="sw-conversation">
+            
+            <% for (let msg of ticket.messages) { %>
+                <div class="msg <%= msg.type %>">
+                    <div class="bubble">
+                        <%= msg.content %>
+                    </div>
+                    <span class="time"><%= msg.time %></span>
+                </div>
+            <% } %>
+        </div>
+
+
+        <% if (["Open", "Pending"].includes(ticket.status)) { %>
+            <div class="sw-editor">
+
+                <div class="editor-toolbar">
+                    <button id="attach-btn">
+                        <svg width="25" height="25" viewBox="0 0 30 30">
+                            <g inkscape:label="Layer 1" inkscape:groupmode="layer" transform="translate(0,-289.0625)">
+                                <path inkscape:connector-curvature="0" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" d="m 22.778176,294.87011 c -1.946455,-1.94646 -5.124615,-1.94645 -7.071068,0 l -0.707107,0.70711 -4.949747,4.94974 -2.8284274,2.82843 c -2.7299272,2.72993 -2.7299293,7.16957 0,9.8995 2.7299292,2.72992 7.1695674,2.72992 9.8994944,0 l 7.778175,-7.77818 -1.414213,-1.41421 -7.778175,7.77817 c -1.970919,1.97092 -5.100151,1.97092 -7.0710679,0 -1.9709166,-1.97091 -1.9709187,-5.10015 0,-7.07107 l 2.8284269,-2.82842 4.949748,-4.94975 0.707106,-0.70711 c 1.187445,-1.18744 3.055199,-1.18744 4.242641,0 1.187442,1.18744 1.187445,3.0552 0,4.24264 l -0.302454,0.30246 -5.3544,5.3544 -2.12132,2.12132 c -0.403971,0.40397 -1.010246,0.40397 -1.414214,0 -0.403968,-0.40397 -0.40397,-1.01025 0,-1.41422 l 7.475721,-7.47572 -1.414214,-1.41421 -7.475721,7.47572 c -1.1629781,1.16298 -1.1629802,3.07966 0,4.24264 1.162981,1.16298 3.079663,1.16298 4.242641,0 l 2.12132,-2.12132 5.354401,-5.3544 0.302454,-0.30245 c 1.946453,-1.94646 1.946455,-5.12462 0,-7.07107 z" id="rect824"/>
+                            </g>
+                        </svg>
+                    </button>
+                    <button id="recorder-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                                width="25" height="25"
+                                viewBox="0 0 25 25"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+
+                            <!-- Mic body -->
+                            <rect x="9" y="2" width="6" height="12" rx="3" ry="3" />
+
+                            <!-- Mic arms -->
+                            <path d="M5 10a7 7 0 0 0 14 0" />
+
+                            <!-- Stand -->
+                            <line x1="12" y1="17" x2="12" y2="21" />
+
+                            <!-- Base -->
+                            <line x1="8" y1="21" x2="16" y2="21" />
+
+                        </svg>
+                    </button>
+                    <button id="picture-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            width="25" height="25"
+                            viewBox="0 0 25 25"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                        <!-- Camera body -->
+                        <rect x="3" y="7" width="18" height="13" rx="2" ry="2"/>
+
+                        <!-- Top bump -->
+                        <path d="M7 7l2-3h6l2 3"/>
+
+                        <!-- Lens -->
+                        <circle cx="12" cy="13" r="3"/>
+
+                        </svg>
+
+                    </button>
+                </div>
+                <div class="media-indicator" id="media-indicator"></div>
+                <div class="editor-area"
+                     contenteditable="true"
+                     placeholder="Write your reply...">
+                </div>
+                <input type="file" id="file-input" hidden />
+                <input type="file" id="image-input" accept="image/*" capture="environment" hidden />
+
+                <button class="send-btn">Send</button>
+
+            </div>
+        <% } %>
+
+    </div>
+</div>

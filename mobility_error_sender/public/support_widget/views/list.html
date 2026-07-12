@@ -1,0 +1,67 @@
+<!-- 
+template variables: name: string, tickets: [
+    {
+        id: string,
+        title: string,
+        status: string,
+    },
+    ...
+]
+-->
+<div id="support-list">
+    <div class="sw-widget">
+
+        <header class="sw-header">
+            <div>
+                <strong>Hello <%= name %></strong>
+            </div>
+            <button class="sw-close">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="50"
+                     height="30"
+                     viewBox="0 0 24 24"
+                     fill="white">
+                    <path
+                        d="M3.5 13.5
+                        C3.5 12.6 4.1 12 5 12
+                        H19
+                        C19.9 12 20.5 12.6 20.5 13.5
+                        C20.5 14.4 19.9 15 19 15
+                        H5
+                        C4.1 15 3.5 14.4 3.5 13.5
+                        Z"/>
+                </svg>
+            </button>
+        </header>
+
+        <div class="sw-filters">
+            <div class="sw-filters">
+            <button class="<%= filter === 'All' ? 'active' : '' %>">All</button>
+            <button class="<%= filter === 'Open' ? 'active' : '' %>">Open</button>
+            <button class="<%= filter === 'Closed' ? 'active' : '' %>">Closed</button>
+            <button class="<%= filter === 'Pending' ? 'active' : '' %>">Pending</button>
+            <button class="<%= filter === 'Resolved' ? 'active' : '' %>">Resolved</button>
+        </div>
+
+        </div>
+
+        <div class="sw-ticket-list">
+            <% for (let ticket of tickets) { %>
+                <div class="sw-ticket <%= ticket.status %>" data-id="<%= ticket.id %>">
+                    <div class="sw-ticket-title">
+                        <%= ticket.title %>
+                    </div>
+                    <div class="sw-ticket-meta">
+                        <span class="status">
+                            <%= ticket.status %>
+                        </span>
+                        <span>
+                            <%= ticket.id %>
+                        </span>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+
+    </div>
+</div>
