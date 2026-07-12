@@ -442,7 +442,7 @@ frappe.request.cleanup = function (opts, r) {
         console.log(messages)
         open_throw_dialog({
             title: __("Message"),
-            message: format_messages(messages),
+            message: format_messages([messages[messages.length - 1]]),
             exc: r.exc
         });
         } else {
