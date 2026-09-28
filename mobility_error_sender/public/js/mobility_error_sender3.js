@@ -202,7 +202,7 @@ async function send_error(con = {}) {
 };
 
 frappe.request.report_error = function (xhr, request_opts) {
-    
+    console.error("Server Error", xhr.responseText, request_opts);
     var data = JSON.parse(xhr.responseText);
     var exc;
     if (data.exc) {
