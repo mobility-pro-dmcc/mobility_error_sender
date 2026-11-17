@@ -25,8 +25,24 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-app_include_css = "/assets/mobility_error_sender/css/mobility_error_sender.css"
-app_include_js = ["https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js", "/assets/mobility_error_sender/js/mobility_error_sender3.js"]
+import os as _os
+
+
+def _versioned(asset):
+	# nginx caches /assets for a year: stamp the URL with the file's mtime so
+	# browsers fetch the new file after every change
+	path = _os.path.join(_os.path.dirname(__file__), "public", asset)
+	try:
+		return f"/assets/mobility_error_sender/{asset}?v={int(_os.path.getmtime(path))}"
+	except OSError:
+		return f"/assets/mobility_error_sender/{asset}"
+
+
+app_include_css = _versioned("css/mobility_error_sender.css")
+app_include_js = ["https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js", _versioned("js/mobility_error_sender4.js")]
+
+# support-button settings for the desk (see boot.py)
+boot_session = "mobility_error_sender.boot.boot_session"
 #, "/assets/mobility_error_sender/support_widget/script2.js"
 
 # include js, css files in header of web template

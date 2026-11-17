@@ -5,20 +5,76 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "api_token"
+  "api_token",
+  "support_button_section",
+  "show_on_errors",
+  "column_break_sb",
+  "show_on_messages",
+  "rules_section",
+  "support_button_rules",
+  "screenshot_section",
+  "screenshot_method"
  ],
  "fields": [
   {
    "fieldname": "api_token",
    "fieldtype": "Password",
    "label": "API Token"
+  },
+  {
+   "fieldname": "support_button_section",
+   "fieldtype": "Section Break",
+   "label": "Support Button"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_on_errors",
+   "fieldtype": "Check",
+   "label": "Show on Errors",
+   "description": "frappe.throw, server exceptions and server errors"
+  },
+  {
+   "fieldname": "column_break_sb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_on_messages",
+   "fieldtype": "Check",
+   "label": "Show on Messages",
+   "description": "Ordinary msgprint messages (not alerts / toasts)"
+  },
+  {
+   "fieldname": "rules_section",
+   "fieldtype": "Section Break",
+   "label": "Message Rules",
+   "description": "Rules are checked top to bottom and the first matching rule decides. If no rule matches, the type setting above decides."
+  },
+  {
+   "fieldname": "support_button_rules",
+   "fieldtype": "Table",
+   "label": "Rules",
+   "options": "Support Button Rule"
+  },
+  {
+   "fieldname": "screenshot_section",
+   "fieldtype": "Section Break",
+   "label": "Screenshot"
+  },
+  {
+   "default": "Browser Capture",
+   "fieldname": "screenshot_method",
+   "fieldtype": "Select",
+   "label": "Screenshot Method",
+   "options": "Browser Capture\nPage Render",
+   "description": "Browser Capture: the browser's own tab capture. Instant and pixel-exact, but the browser asks the user to allow it each time. Falls back to Page Render if refused or unsupported.<br>Page Render: redraws the visible part of the page with html2canvas. No prompt, but slower and less exact."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-12-22 14:21:11.441858",
+ "modified": "2026-11-17 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Mobility Error Sender",
  "name": "desk365",
